@@ -1,3 +1,4 @@
+const puppeteer = require('puppeteer');
 const express = require('express');
 const { chromium } = require('playwright');
 const fs = require('fs');
@@ -10,7 +11,7 @@ app.post('/login', async (req, res) => {
     const { phone, password } = req.body;
 
     try {
-        const browser = await chromium.launch({ 
+        const browser = await puppeteer.launch({ 
         headless: true,  // ← так
         args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
