@@ -1,6 +1,5 @@
 const puppeteer = require('puppeteer');
 const express = require('express');
-const { chromium } = require('playwright');
 const fs = require('fs');
 
 const app = express();
@@ -12,8 +11,8 @@ app.post('/login', async (req, res) => {
 
     try {
         const browser = await puppeteer.launch({ 
-        headless: true,  // ← так
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
         
         const context = await browser.newContext({
