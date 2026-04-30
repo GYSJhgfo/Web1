@@ -1,6 +1,15 @@
 {
   "name": "web1",
   "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/GYSJhgfo/Web1#readme",
+  "bugs": {
+    "url": "https://github.com/GYSJhgfo/Web1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GYSJhgfo/Web1.git"
+  },
   "license": "ISC",
   "author": "",
   "type": "commonjs",
@@ -9,8 +18,10 @@
     "start": "node server.js",
     "postinstall": "npx puppeteer browsers install chrome"
   },
- "dependencies": {
+  "dependencies": {
+    "dotenv": "^17.4.2",
     "express": "^4.18.2",
     "puppeteer": "^21.0.0"
-}
+  },
+  "devDependencies": {}
 }

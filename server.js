@@ -21,7 +21,7 @@ app.post('/login', async (req, res) => {
         
         const page = await context.newPage();
 
-        await page.goto('https://account.viber.com/uk/login', { waitUntil: 'networkidle' });
+        await page.goto('https://web.whatsapp.com/', { waitUntil: 'networkidle' });
         await page.waitForTimeout(3000);
 
         // Чекаємо поле телефону
